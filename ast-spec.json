@@ -23,6 +23,58 @@
         }
       ]
     },
+    "AccessorProperty": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/AccessorPropertyComputedName"
+        },
+        {
+          "$ref": "#/definitions/AccessorPropertyNonComputedName"
+        }
+      ]
+    },
+    "AccessorPropertyComputedName": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/PropertyDefinitionComputedNameBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "AccessorProperty"
+              ]
+            }
+          },
+          "required": [
+            "type"
+          ]
+        }
+      ]
+    },
+    "AccessorPropertyNonComputedName": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/PropertyDefinitionNonComputedNameBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "AccessorProperty"
+              ]
+            }
+          },
+          "required": [
+            "type"
+          ]
+        }
+      ]
+    },
     "ArrayExpression": {
       "type": "object",
       "properties": {
@@ -41,6 +93,9 @@
               },
               {
                 "$ref": "#/definitions/SpreadElement"
+              },
+              {
+                "type": "null"
               }
             ]
           }
@@ -345,6 +400,7 @@
     "AST_NODE_TYPES": {
       "type": "string",
       "enum": [
+        "AccessorProperty",
         "ArrayExpression",
         "ArrayPattern",
         "ArrowFunctionExpression",
@@ -433,6 +489,7 @@
         "WhileStatement",
         "WithStatement",
         "YieldExpression",
+        "TSAbstractAccessorProperty",
         "TSAbstractKeyword",
         "TSAbstractMethodDefinition",
         "TSAbstractPropertyDefinition",
@@ -488,6 +545,7 @@
         "TSQualifiedName",
         "TSReadonlyKeyword",
         "TSRestType",
+        "TSSatisfiesExpression",
         "TSStaticKeyword",
         "TSStringKeyword",
         "TSSymbolKeyword",
@@ -982,6 +1040,9 @@
     "ClassElement": {
       "oneOf": [
         {
+          "$ref": "#/definitions/AccessorProperty"
+        },
+        {
           "$ref": "#/definitions/MethodDefinition"
         },
         {
@@ -989,6 +1050,9 @@
         },
         {
           "$ref": "#/definitions/StaticBlock"
+        },
+        {
+          "$ref": "#/definitions/TSAbstractAccessorProperty"
         },
         {
           "$ref": "#/definitions/TSAbstractMethodDefinition"
@@ -1438,7 +1502,7 @@
               }
             },
             "declaration": {
-              "$ref": "#/definitions/NamedExportDeclarations"
+              "type": "null"
             },
             "source": {
               "type": "null"
@@ -1474,7 +1538,7 @@
               }
             },
             "declaration": {
-              "type": "null"
+              "$ref": "#/definitions/NamedExportDeclarations"
             },
             "source": {
               "type": "null"
@@ -1648,6 +1712,9 @@
         },
         {
           "$ref": "#/definitions/TSNonNullExpression"
+        },
+        {
+          "$ref": "#/definitions/TSSatisfiesExpression"
         },
         {
           "$ref": "#/definitions/TSTypeAssertion"
@@ -2365,9 +2432,6 @@
     "JSXExpression": {
       "oneOf": [
         {
-          "$ref": "#/definitions/JSXEmptyExpression"
-        },
-        {
           "$ref": "#/definitions/JSXExpressionContainer"
         },
         {
@@ -2890,7 +2954,7 @@
       "type": "object",
       "properties": {
         "object": {
-          "$ref": "#/definitions/LeftHandSideExpression"
+          "$ref": "#/definitions/Expression"
         },
         "property": {
           "oneOf": [
@@ -3216,6 +3280,16 @@
         }
       ]
     },
+    "ModuleBody_TODOFixThis": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/TSModuleBlock"
+        },
+        {
+          "$ref": "#/definitions/TSModuleDeclaration"
+        }
+      ]
+    },
     "NamedExportDeclarations": {
       "oneOf": [
         {
@@ -3372,9 +3446,6 @@
     },
     "ObjectLiteralElement": {
       "oneOf": [
-        {
-          "$ref": "#/definitions/MethodDefinition"
-        },
         {
           "$ref": "#/definitions/Property"
         },
@@ -4778,6 +4849,66 @@
         "finalizer"
       ]
     },
+    "TSAbstractAccessorProperty": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/TSAbstractAccessorPropertyComputedName"
+        },
+        {
+          "$ref": "#/definitions/TSAbstractAccessorPropertyNonComputedName"
+        }
+      ]
+    },
+    "TSAbstractAccessorPropertyComputedName": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/PropertyDefinitionComputedNameBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "TSAbstractAccessorProperty"
+              ]
+            },
+            "value": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ]
+        }
+      ]
+    },
+    "TSAbstractAccessorPropertyNonComputedName": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/PropertyDefinitionNonComputedNameBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "TSAbstractAccessorProperty"
+              ]
+            },
+            "value": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ]
+        }
+      ]
+    },
     "TSAbstractKeyword": {
       "type": "object",
       "properties": {
@@ -5979,6 +6110,19 @@
       ]
     },
     "TSModuleDeclaration": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/TSModuleDeclarationGlobal"
+        },
+        {
+          "$ref": "#/definitions/TSModuleDeclarationModule"
+        },
+        {
+          "$ref": "#/definitions/TSModuleDeclarationNamespace"
+        }
+      ]
+    },
+    "TSModuleDeclarationBase": {
       "type": "object",
       "properties": {
         "type": {
@@ -5993,19 +6137,12 @@
               "$ref": "#/definitions/Identifier"
             },
             {
-              "$ref": "#/definitions/Literal"
+              "$ref": "#/definitions/StringLiteral"
             }
           ]
         },
         "body": {
-          "oneOf": [
-            {
-              "$ref": "#/definitions/TSModuleBlock"
-            },
-            {
-              "$ref": "#/definitions/TSModuleDeclaration"
-            }
-          ]
+          "$ref": "#/definitions/ModuleBody_TODOFixThis"
         },
         "global": {
           "type": "boolean"
@@ -6018,11 +6155,249 @@
           "items": {
             "$ref": "#/definitions/Modifier"
           }
+        },
+        "kind": {
+          "$ref": "#/definitions/TSModuleDeclarationKind"
         }
       },
       "required": [
         "type",
-        "id"
+        "id",
+        "kind"
+      ]
+    },
+    "TSModuleDeclarationGlobal": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/TSModuleDeclarationBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "global"
+              ]
+            },
+            "body": {
+              "$ref": "#/definitions/TSModuleBlock"
+            },
+            "id": {
+              "$ref": "#/definitions/Identifier"
+            },
+            "global": {
+              "type": "boolean",
+              "enum": [
+                true
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "body",
+            "id",
+            "global"
+          ]
+        }
+      ]
+    },
+    "TSModuleDeclarationKind": {
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "global"
+          ]
+        },
+        {
+          "type": "string",
+          "enum": [
+            "module"
+          ]
+        },
+        {
+          "type": "string",
+          "enum": [
+            "namespace"
+          ]
+        }
+      ]
+    },
+    "TSModuleDeclarationModule": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/TSModuleDeclarationModuleWithIdentifierId"
+        },
+        {
+          "$ref": "#/definitions/TSModuleDeclarationModuleWithStringId"
+        }
+      ]
+    },
+    "TSModuleDeclarationModuleBase": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/TSModuleDeclarationBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "module"
+              ]
+            },
+            "global": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "kind"
+          ]
+        }
+      ]
+    },
+    "TSModuleDeclarationModuleWithIdentifierId": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/TSModuleDeclarationModuleBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "module"
+              ]
+            },
+            "id": {
+              "$ref": "#/definitions/Identifier"
+            },
+            "body": {
+              "$ref": "#/definitions/ModuleBody_TODOFixThis"
+            }
+          },
+          "required": [
+            "kind",
+            "id",
+            "body"
+          ]
+        }
+      ]
+    },
+    "TSModuleDeclarationModuleWithStringId": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/TSModuleDeclarationModuleWithStringIdDeclared"
+        },
+        {
+          "$ref": "#/definitions/TSModuleDeclarationModuleWithStringIdNotDeclared"
+        }
+      ]
+    },
+    "TSModuleDeclarationModuleWithStringIdDeclared": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/TSModuleDeclarationModuleBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "module"
+              ]
+            },
+            "id": {
+              "$ref": "#/definitions/StringLiteral"
+            },
+            "declare": {
+              "type": "boolean",
+              "enum": [
+                true
+              ]
+            },
+            "body": {
+              "$ref": "#/definitions/TSModuleBlock"
+            }
+          },
+          "required": [
+            "kind",
+            "id",
+            "declare"
+          ]
+        }
+      ]
+    },
+    "TSModuleDeclarationModuleWithStringIdNotDeclared": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/TSModuleDeclarationModuleBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "module"
+              ]
+            },
+            "id": {
+              "$ref": "#/definitions/StringLiteral"
+            },
+            "declare": {
+              "type": "boolean",
+              "enum": [
+                false
+              ]
+            },
+            "body": {
+              "$ref": "#/definitions/TSModuleBlock"
+            }
+          },
+          "required": [
+            "kind",
+            "id",
+            "declare",
+            "body"
+          ]
+        }
+      ]
+    },
+    "TSModuleDeclarationNamespace": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/TSModuleDeclarationBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "namespace"
+              ]
+            },
+            "id": {
+              "$ref": "#/definitions/Identifier"
+            },
+            "body": {
+              "$ref": "#/definitions/ModuleBody_TODOFixThis"
+            },
+            "global": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "kind",
+            "id",
+            "body"
+          ]
+        }
       ]
     },
     "TSNamedTupleMember": {
@@ -6409,6 +6784,28 @@
         "typeAnnotation"
       ]
     },
+    "TSSatisfiesExpression": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "TSSatisfiesExpression"
+          ]
+        },
+        "expression": {
+          "$ref": "#/definitions/Expression"
+        },
+        "typeAnnotation": {
+          "$ref": "#/definitions/TypeNode"
+        }
+      },
+      "required": [
+        "type",
+        "expression",
+        "typeAnnotation"
+      ]
+    },
     "TSStaticKeyword": {
       "type": "object",
       "properties": {
@@ -6666,13 +7063,17 @@
         },
         "out": {
           "type": "boolean"
+        },
+        "const": {
+          "type": "boolean"
         }
       },
       "required": [
         "type",
         "name",
         "in",
-        "out"
+        "out",
+        "const"
       ]
     },
     "TSTypeParameterDeclaration": {
@@ -6963,6 +7364,9 @@
         },
         {
           "$ref": "#/definitions/TSPublicKeyword"
+        },
+        {
+          "$ref": "#/definitions/TSQualifiedName"
         },
         {
           "$ref": "#/definitions/TSReadonlyKeyword"

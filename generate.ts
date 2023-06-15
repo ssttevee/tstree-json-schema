@@ -6,7 +6,7 @@ import ts from "typescript";
   const file = ts.createSourceFile(
     "ast-spec.ts",
     await (await fetch(
-      "https://unpkg.com/@typescript-eslint/types@5.41.0/dist/generated/ast-spec.d.ts",
+      "https://unpkg.com/@typescript-eslint/types@5.59.11/dist/generated/ast-spec.d.ts",
     )).text(),
     ts.ScriptTarget.ESNext,
   );
